@@ -41,6 +41,31 @@ fn main() {
         .map(|(a, b)| (a.to_string(), b.to_string()))
         .collect();
 	
+    // go get rule file if there is one
+    let args: Vec<String> = env::args().collect();
+    if args.len() > 1 {
+        rules = HashMap::new(); // clear it out
+
+        let rule_file = &args[1]; // get rule file name from args
+
+        let mut f = File::open(rule_file).expect("Rule file not found!"); // open file
+        let mut contents = "".to_string();
+        f.read_to_string(&mut contents).expect(
+            "Could not read file!",
+        ); // write to file
+
+        // parse file
+        let lines: Vec<String> = contents.split("\n").map(|s| s.to_string()).collect();
+        for line in lines {
+            let stuff: Vec<String> = line.split(char::is_whitespace)
+                .map(|s| s.to_string())
+                .collect();
+            if stuff.len() > 1 {
+                rules.insert(stuff[0].clone(), stuff[1].clone());
+            }
+        }
+    }
+
     for nl in stdin.lock().lines().filter_map(|l| {
         l.map(|l: String| rule_replace(l.to_string(), &rules)).ok()
     })
