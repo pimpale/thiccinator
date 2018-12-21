@@ -2,15 +2,25 @@ use std::io::{self, BufRead};
 fn main() {
 	let stdin = io::stdin();
     for line in stdin.lock().lines() {
-        println!("{}", thiccinate(line.unwrap()));
+        println!("{}",transform(line.unwrap()));
     }
 }
-	
 
-fn thiccinate(text:String) -> String {
-	let mut thiccinated = String::new();
+fn transform(text:String) -> String
+{
+	let mut transformed = String::new();
 	for c in text.to_lowercase().chars() {
-		thiccinated.push(match c {
+            transformed = format!("{}{}", transformed, regionate(c));
+	}
+	transformed 
+}
+
+fn regionate(character:char) -> String {
+    format!(":regional_indicator_{}: ", character)
+}
+
+fn thiccinate(character:char) -> String {
+    match character {
 		'a' => '卂',
 		'b' => '乃',
 		'c' => '匚',
@@ -37,8 +47,6 @@ fn thiccinate(text:String) -> String {
 		'x' => '乂',
 		'y' => '丫',
 		'z' => '乙',
-		_ => c
-		});
-	}
-	thiccinated
+		_ => character
+		}.to_string()
 }
