@@ -37,7 +37,11 @@ fn transform(text:String, fun:&Fn(char)->String) -> String
 }
 
 fn regionate(character:char) -> String {
-    format!(":regional_indicator_{}: ", character)
+	if character.is_alphabetic() {
+    	format!(":regional_indicator_{}: ", character.to_lowercase())
+	} else {
+		character.to_string()
+	}
 }
 
 fn thiccinate(character:char) -> String {
