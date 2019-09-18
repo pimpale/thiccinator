@@ -1,24 +1,21 @@
 use std::io::{self, BufRead};
 fn main() {
-    let args:Vec<String> = std::env::args().collect();
-    if args.len() <= 1 || args[1] == "--help"
-    {
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() <= 1 || args[1] == "--help" {
         println!(
-"Usage: thiccinator [OPTION]
+            "Usage: thiccinator [OPTION]
 Transform text read from standard input
 
 --help                view this usage
 --thiccinate          convert text to pseudo-kanji characters
---regionate           converts each character to discord regional indicator");
-    } 
-    else
-    {
-        let fun:&Fn(char)->String = 
-            if args[1] == "--regionate" {
-                &regionate
-            } else {
-                &thiccinate
-            };
+--regionate           converts each character to discord regional indicator"
+        );
+    } else {
+        let fun: &Fn(char) -> String = if args[1] == "--regionate" {
+            &regionate
+        } else {
+            &thiccinate
+        };
 
         let stdin = io::stdin();
         for line in stdin.lock().lines() {
@@ -27,24 +24,23 @@ Transform text read from standard input
     }
 }
 
-fn transform(text:String, fun:&Fn(char)->String) -> String
-{
+fn transform(text: String, fun: &Fn(char) -> String) -> String {
     let mut transformed = String::new();
     for c in text.to_lowercase().chars() {
-        transformed = format!("{}{}", transformed,fun(c));
+        transformed = format!("{}{}", transformed, fun(c));
     }
-    transformed 
+    transformed
 }
 
-fn regionate(character:char) -> String {
-	if character.is_alphabetic() {
-    	format!(":regional_indicator_{}: ", character.to_lowercase())
-	} else {
-		character.to_string()
-	}
+fn regionate(character: char) -> String {
+    if character.is_alphabetic() {
+        format!(":regional_indicator_{}:", character.to_lowercase())
+    } else {
+        character.to_string()
+    }
 }
 
-fn thiccinate(character:char) -> String {
+fn thiccinate(character: char) -> String {
     match character {
         'a' => '卂',
         'b' => '乃',
@@ -72,6 +68,7 @@ fn thiccinate(character:char) -> String {
         'x' => '乂',
         'y' => '丫',
         'z' => '乙',
-        _ => character
-    }.to_string()
+        _ => character,
+    }
+    .to_string()
 }
